@@ -12,4 +12,4 @@ Clone repository
 ```
 
 ## Support
-For support, email rendixmars@yandex.ru or t.me/rendixmars
+For support, email rendixmars@yandex.ru or https://t.me/rendixmars
