@@ -38,18 +38,15 @@ def youtube_download():
         return
     try:
         ydl_opts = {
-            "format": f"mp4[height={res}]",
-            'outtmpl': 'videos/%(id)s.%(ext)s',
-            'quiet': True,
-            'no_warnings': True
+            "format": f"bestvideo[height<={res}]+bestaudio/best",  # Скачиваем лучшее видео и аудио
+            'outtmpl': 'videos/%(title)s.%(ext)s',  # Название файла
+            'quiet': True,  # Отключаем вывод в консоль
+            'no_warnings': True,  # Отключаем предупреждения
+            'merge_output_format': 'mp4',  # Объединяем видео и аудио в MP4
         }
         with YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False)
             ydl.download([url])
         messagebox.showinfo("Успех", f"Видео загружено с качеством {res}!")
-        return {
-            'path': f'videos/{info["id"]}.mp4'
-        }
     except Exception as e:
         messagebox.showerror("Ошибка", f"Не удалось загрузить видео: {e}")
 
