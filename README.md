@@ -8,7 +8,7 @@ Clone repository
 ```bash
     git clone https://github.com/RendixMars/Rendix-Downloader.git
     cd Rendix-Downloader
-    main.py
+    python main.py
 ```
 
 ## Support
