@@ -25,6 +25,9 @@ install_package('pydub')
 install_package('pytubefix')
 install_package('pytube')
 install_package('spotdl')
+install_package('yt-dlp')
+install_package('tkinter')
+install_package('ctypes')
 
 # Функция для скачивания видео с Youtube
 def youtube_download():
