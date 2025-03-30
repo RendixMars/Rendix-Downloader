@@ -5,9 +5,8 @@ import subprocess
 import sys
 import re
 import ctypes
-from pytube import *
-from pytubefix import *
-from pydub import AudioSegment as AS
+#from pytube import *
+#from pytubefix import *
 import os
 import tkinter as tk
 from tkinter import PhotoImage, filedialog, messagebox
@@ -21,9 +20,8 @@ def install_package(package_name):
         print(f'{package_name} уже установлен.')
 
 # Проверяем и устанавливаем необходимые библиотеки
-install_package('pydub')
-install_package('pytubefix')
-install_package('pytube')
+#install_package('pytubefix')
+#install_package('pytube')
 install_package('spotdl')
 install_package('yt-dlp')
 install_package('tkinter')
@@ -56,20 +54,40 @@ def youtube_download():
 
 # Функция для конвертации аудиофайла
 def converter():
-    path = filedialog.askopenfilename(title="Выберите файл")
+    path = filedialog.askopenfilename(title="Выберите MP4 файл", filetypes=[("MP4 файлы", "*.mp4")])
     if not path:
-        return
-    file_format = format_entry.get()
-    if not file_format:
-        messagebox.showerror("Ошибка", "Введите формат для конвертации!")
+        messagebox.showerror("Ошибка", "Выберите путь к файлу!")
         return
     try:
-        audio = AS.from_file(path, format='mp3')
-        output_path = f"output.{file_format}"
-        audio.export(output_path, format=file_format)
+        output_path = filedialog.asksaveasfilename(defaultextension=".gif", filetypes=[("GIF файлы", "*.gif")])
+        if not output_path:
+            return
+        
+        # Команда для конвертации MP4 в GIF через ffmpeg
+        # command = [
+        #     "ffmpeg",
+        #     "-i", path,          # Входной файл
+        #     "-vf", "fps=20,scale=640:-1:flags=lanczos",  # Частота кадров и масштабирование
+        #     "-c:v", "gif",       # Кодек для GIF
+        #     output_path          # Выходной файл
+        # ] 
+        first_command = [
+            "ffmpeg", "-i", path, "-filter_complex", "[0:v] palettegen", 'palette.png'
+        ] 
+        second_command = [
+            "ffmpeg", "-i", path, "-i", 'palette.png', "-filter_complex", "[0:v] fps=30,scale=650:-1 [new];[new][1:v] paletteuse", output_path
+        ] 
+        # ffmpeg -i path.mp4 -filter_complex "[0:v] palettegen" palette.png
+        # ffmpeg -i path.mp4 -i palette.png -filter_complex "[0:v] fps=30,scale=650:-1 [new];[new][1:v] paletteuse" output_trimmed.gif
+        
+        # Выполняем команду
+        subprocess.run(first_command, check=True)
+        subprocess.run(second_command, check=True)
         messagebox.showinfo("Успех", f"Файл успешно конвертирован в {output_path}!")
-    except Exception as e:
+    except subprocess.CalledProcessError as e:
         messagebox.showerror("Ошибка", f"Не удалось конвертировать файл: {e}")
+    except Exception as e:
+        messagebox.showerror("Ошибка", f"Произошла ошибка: {e}")
 
 # Функция для скачивания песни с Spotify (не работает в России)
 def spotdl_download():
@@ -129,15 +147,8 @@ button_frame.pack(pady=10)
 tk.Button(button_frame, text="Скачать видео с YouTube", font=button_font, command=youtube_download, bg="IndianRed1").grid(row=0, column=0, padx=10, pady=5)
 tk.Button(button_frame, text="Скачать песню с Spotify", font=button_font, command=spotdl_download, bg="lightgreen").grid(row=0, column=1, padx=10, pady=5)
 
-# Поле для ввода формата
-format_frame = tk.Frame(root, bg="black")
-format_frame.pack(pady=10)
-tk.Label(format_frame, text="Введите формат для конвертации (например, mp3):", font=label_font, fg="White", bg="black").grid(row=0, column=0, padx=5)
-format_entry = tk.Entry(format_frame, width=20)
-format_entry.grid(row=0, column=1, padx=5)
-
 # Кнопка для конвертации
-tk.Button(root, text="Конвертировать файл", font=button_font, command=converter, bg="lightyellow").pack(pady=10)
+tk.Button(root, text="Конвертировать mp4 в GIF", font=button_font, command=converter, bg="lightyellow").pack(pady=10)
 
 # Цвета
 root["bg"] = "black"
