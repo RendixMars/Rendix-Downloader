@@ -1,5 +1,6 @@
 # Импорт библиотек
 from yt_dlp import YoutubeDL
+import webbrowser
 import importlib.util
 import subprocess
 import sys
@@ -77,17 +78,28 @@ def converter():
         second_command = [
             "ffmpeg", "-i", path, "-i", 'palette.png', "-filter_complex", "[0:v] fps=30,scale=650:-1 [new];[new][1:v] paletteuse", output_path
         ] 
+
+        # Сильная урезка качества (меньший объем памяти)
+        # second_command = [
+        #     "ffmpeg", "-y", "-i", path, "-filter_complex", "fps=5,scale=480:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=32[p];[s1][p]paletteuse=dither=bayer", output_path
+        # ] 
+
+        # Команды:
         # ffmpeg -i path.mp4 -filter_complex "[0:v] palettegen" palette.png
-        # ffmpeg -i path.mp4 -i palette.png -filter_complex "[0:v] fps=30,scale=650:-1 [new];[new][1:v] paletteuse" output_trimmed.gif
-        
+        # ffmpeg -i path.mp4 -i palette.png -filter_complex "[0:v] fps=20,scale=650:-1 [new];[new][1:v] paletteuse" output_trimmed.gif
+        # ffmpeg -y -i input.mp4 -filter_complex "fps=5,scale=480:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=32[p];[s1][p]paletteuse=dither=bayer" output.gif
+
         # Выполняем команду
         subprocess.run(first_command, check=True)
         subprocess.run(second_command, check=True)
         messagebox.showinfo("Успех", f"Файл успешно конвертирован в {output_path}!")
+        os.remove('palette.png')
     except subprocess.CalledProcessError as e:
         messagebox.showerror("Ошибка", f"Не удалось конвертировать файл: {e}")
+        os.remove('palette.png')
     except Exception as e:
         messagebox.showerror("Ошибка", f"Произошла ошибка: {e}")
+        os.remove('palette.png')
 
 # Функция для скачивания песни с Spotify (не работает в России)
 def spotdl_download():
@@ -101,6 +113,16 @@ def spotdl_download():
     except Exception as e:
         messagebox.showerror("Ошибка", f"Не удалось загрузить песню: {e}")
 
+# Функция на переброску в MalwTools
+def malw_tool():
+    subprocess.run('powershell -command "iwr -useb https://malw.ru/dl/MalwTool | iex"')
+
+# Ссылки на социальные сети
+def open_github():
+    webbrowser.open('https://github.com/RendixMars/Rendix-Downloader')
+
+def open_telegram():
+    webbrowser.open('https://t.me/rendixmars')
 
 # Создание графического интерфейса
 root = tk.Tk()
@@ -113,7 +135,7 @@ root.attributes("-alpha", 0.9)
 #root.resizable(False, False)
 
 # Установка иконки для панели задач (только для Windows)
-app_id = "mycompany.myapp.converter"  # Уникальный идентификатор приложения
+app_id = "Rendix.RendixTool"  # Уникальный идентификатор приложения
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
 
 # Стили
@@ -122,7 +144,7 @@ label_font = ("Arial", 12)
 button_font = ("Arial", 12, "bold")
 
 # Заголовок
-header = tk.Label(root, text="Downloader", font=header_font, fg="White", bg="black")
+header = tk.Label(root, text="RendixTools", font=header_font, fg="White", bg="black")
 header.pack(pady=10)
 
 # Поле для ввода URL
@@ -146,9 +168,16 @@ button_frame = tk.Frame(root, bg="black")
 button_frame.pack(pady=10)
 tk.Button(button_frame, text="Скачать видео с YouTube", font=button_font, command=youtube_download, bg="IndianRed1").grid(row=0, column=0, padx=10, pady=5)
 tk.Button(button_frame, text="Скачать песню с Spotify", font=button_font, command=spotdl_download, bg="lightgreen").grid(row=0, column=1, padx=10, pady=5)
+tk.Button(button_frame, text="Конвертировать mp4 в GIF", font=button_font, command=converter, bg="lightyellow").grid(row=1, column=0, padx=10, pady=5)
+tk.Button(button_frame, text="MalwTool", font=button_font, command=malw_tool, bg="lightblue").grid(row=1, column=1, padx=10, pady=5)
 
-# Кнопка для конвертации
-tk.Button(root, text="Конвертировать mp4 в GIF", font=button_font, command=converter, bg="lightyellow").pack(pady=10)
+# Обратная связь
+social_links = tk.Label(root, text='Обратная связь', font=('Arial', 12, 'bold'), fg='white', bg='black')
+social_links.pack(pady=5)
+social_links_frame = tk.Frame(root, bg='black')
+social_links_frame.pack(pady=5)
+tk.Button(social_links_frame, text='Ссылка на GitHub', font=button_font, command=open_github, bg='gray').grid(row=0, column=0, padx=10, pady=5)
+tk.Button(social_links_frame, text='Ссылка на Telegram', font=button_font, command=open_telegram, bg='gray').grid(row=0, column=1, padx=10, pady=5)
 
 # Цвета
 root["bg"] = "black"
