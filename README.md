@@ -11,6 +11,14 @@ Clone repository
     pip install -r requirements.txt
     python main.py
 ```
+Or
+Download in zip
+```bash
+    cd Rendix-Downloader
+    pip install -r requirements.txt
+    python main.py
+```
+
 
 ## Support
 For support, email rendixmars@yandex.ru or https://t.me/rendixmars
