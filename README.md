@@ -9,6 +9,7 @@ Clone repository
     pip install -r requirements.txt
     git clone https://github.com/RendixMars/Rendix-Downloader.git
     cd Rendix-Downloader
+    pip install -r requirements.txt
     python main.py
 ```
 
