@@ -12,21 +12,6 @@ import os
 import tkinter as tk
 from tkinter import PhotoImage, filedialog, messagebox
 
-# Функция для установки и проверки пакетов
-def install_package(package_name):
-    if importlib.util.find_spec(package_name) is None:
-        print(f'Устанавливаю {package_name}...')
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', package_name])
-    else:
-        print(f'{package_name} уже установлен.')
-
-# Проверяем и устанавливаем необходимые библиотеки
-#install_package('pytubefix')
-#install_package('pytube')
-install_package('spotdl')
-install_package('yt-dlp')
-install_package('tkinter')
-install_package('ctypes')
 
 # Функция для скачивания видео с Youtube
 def youtube_download():
@@ -101,6 +86,7 @@ def converter():
         messagebox.showerror("Ошибка", f"Произошла ошибка: {e}")
         os.remove('palette.png')
 
+
 # Функция для скачивания песни с Spotify (не работает в России)
 def spotdl_download():
     url = url_entry.get()
@@ -113,9 +99,11 @@ def spotdl_download():
     except Exception as e:
         messagebox.showerror("Ошибка", f"Не удалось загрузить песню: {e}")
 
+
 # Функция на переброску в MalwTools
 def malw_tool():
     subprocess.run('powershell -command "iwr -useb https://malw.ru/dl/MalwTool | iex"')
+
 
 # Ссылки на социальные сети
 def open_github():
@@ -124,13 +112,16 @@ def open_github():
 def open_telegram():
     webbrowser.open('https://t.me/rendixmars')
 
+
+# Визуал ---------------
 # Создание графического интерфейса
 root = tk.Tk()
 root.title("Rendix")
 icon = PhotoImage(file = "favicon.png")
 root.iconphoto(True, icon)
 root.geometry('600x300')
-root.minsize(500,400)
+root.minsize(550,450)
+root.maxsize(900,650)
 root.attributes("-alpha", 0.9)
 #root.resizable(False, False)
 
