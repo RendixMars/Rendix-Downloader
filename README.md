@@ -6,6 +6,7 @@
 ## Installation
 Clone repository
 ```bash
+    pip install -r requirements.txt
     git clone https://github.com/RendixMars/Rendix-Downloader.git
     cd Rendix-Downloader
     python main.py
