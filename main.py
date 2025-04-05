@@ -104,6 +104,26 @@ def spotdl_download():
 def malw_tool():
     subprocess.run('powershell -command "iwr -useb https://malw.ru/dl/MalwTool | iex"')
 
+# Функция со всем необходимым (драйвера, приложения и т.д., делал для себя, но может кому-то пригодится)
+def download_all():
+    # Скачивание драйверов и приложений
+    result = messagebox.askyesno(title="Скачивание", message="Скачивание драйверов и приложений. Продолжить?\nNvidia App, Discord, Steam, Telegram, Epic Games, Firefox, VSCode, uTorrent, LocalSend, Obsidian, Office 2024 (Windows 10/11)")
+    if result:
+        webbrowser.open('https://us.download.nvidia.com/nvapp/client/11.0.3.218/NVIDIA_app_v11.0.3.218.exe')
+        webbrowser.open('https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x64')
+        webbrowser.open('https://cdn.fastly.steamstatic.com/client/installer/SteamSetup.exe')
+        webbrowser.open('https://telegram.org/dl/desktop/win64')
+        webbrowser.open('https://launcher-public-service-prod06.ol.epicgames.com/launcher/api/installer/download/EpicGamesLauncherInstaller.msi')
+        webbrowser.open('https://www.mozilla.org/ru/firefox/download/thanks/')
+        webbrowser.open('https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user')
+        webbrowser.open('https://c2rsetup.officeapps.live.com/c2r/downloadVS.aspx?sku=community&channel=Release&version=VS2022&source=VSLandingPage&cid=2030:1d6570fdb539450faf61698a601a2de4')
+        webbrowser.open('https://www.utorrent.com/intl/ru/web/downloads/complete/track/stable/os/win/')
+        webbrowser.open('https://github.com/localsend/localsend/releases/download/v1.17.0/LocalSend-1.17.0-windows-x86-64.exe')
+        webbrowser.open('https://github.com/obsidianmd/obsidian-releases/releases/download/v1.8.9/Obsidian-1.8.9.exe')
+        webbrowser.open('https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/ru-ru/ProPlus2024Retail.img')
+        messagebox.showinfo(title='Напоминание', message='Активация Office происходит через инструмент MalwTool')
+
+
 
 # Ссылки на социальные сети
 def open_github():
@@ -157,18 +177,22 @@ resolution_entry.focus()  # Устанавливаем фокус на поле 
 # Кнопки для действий
 button_frame = tk.Frame(root, bg="black")
 button_frame.pack(pady=10)
-tk.Button(button_frame, text="Скачать видео с YouTube", font=button_font, command=youtube_download, bg="IndianRed1").grid(row=0, column=0, padx=10, pady=5)
-tk.Button(button_frame, text="Скачать песню с Spotify", font=button_font, command=spotdl_download, bg="lightgreen").grid(row=0, column=1, padx=10, pady=5)
-tk.Button(button_frame, text="Конвертировать mp4 в GIF", font=button_font, command=converter, bg="lightyellow").grid(row=1, column=0, padx=10, pady=5)
-tk.Button(button_frame, text="MalwTool", font=button_font, command=malw_tool, bg="lightblue").grid(row=1, column=1, padx=10, pady=5)
+width_action_button = 23 # Ширина кнопок
+tk.Button(button_frame, text="Скачать видео с YouTube", width=width_action_button, font=button_font, command=youtube_download, bg="IndianRed1").grid(row=0, column=0, padx=10, pady=5)
+tk.Button(button_frame, text="Скачать песню с Spotify", width=width_action_button, font=button_font, command=spotdl_download, bg="lightgreen").grid(row=0, column=1, padx=10, pady=5)
+tk.Button(button_frame, text="Конвертировать mp4 в GIF", width=width_action_button, font=button_font, command=converter, bg="lightyellow").grid(row=1, column=0, padx=10, pady=5)
+tk.Button(button_frame, text="MalwTool", width=width_action_button, font=button_font, command=malw_tool, bg="lightblue").grid(row=1, column=1, padx=10, pady=5)
+tk.Button(button_frame, text="Скачать всё что нужно", width=width_action_button, font=button_font, command=download_all, bg="red").grid(row=2, column=0, columnspan=2, padx=10, pady=5)
 
 # Обратная связь
 social_links = tk.Label(root, text='Обратная связь', font=('Arial', 12, 'bold'), fg='white', bg='black')
 social_links.pack(pady=5)
 social_links_frame = tk.Frame(root, bg='black')
 social_links_frame.pack(pady=5)
-tk.Button(social_links_frame, text='Ссылка на GitHub', font=button_font, command=open_github, bg='gray').grid(row=0, column=0, padx=10, pady=5)
-tk.Button(social_links_frame, text='Ссылка на Telegram', font=button_font, command=open_telegram, bg='gray').grid(row=0, column=1, padx=10, pady=5)
+width_social_button = 20 # Ширина кнопок
+tk.Button(social_links_frame, text='Ссылка на GitHub', width=width_social_button, font=button_font, command=open_github, bg='gray').grid(row=0, column=0, padx=10, pady=5)
+tk.Button(social_links_frame, text='Ссылка на Telegram', width=width_social_button, font=button_font, command=open_telegram, bg='gray').grid(row=0, column=1, padx=10, pady=5)
+tk.Button(social_links_frame, text='Создатель MalwTool', width=width_social_button, font=button_font, command=lambda: webbrowser.open('https://malw.ru/pages'), bg='gray').grid(row=1, column=0, columnspan=2, padx=10, pady=5)
 
 # Цвета
 root["bg"] = "black"
